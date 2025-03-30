@@ -19,6 +19,7 @@ def fetch_integer_numbers(str)
   # Support different delimiters
   if str.start_with?("//")
     delimiter, str = str[2..].split("\n", 2)
+    delimiter = delimiter[1..-2] if delimiter.start_with?("[") && delimiter.end_with?("]")
     str.gsub(delimiter, ',').split(',').map(&:to_i)
   else
     str.gsub("\n", ',').split(',').map(&:to_i)

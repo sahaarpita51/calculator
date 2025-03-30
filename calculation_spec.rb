@@ -58,6 +58,10 @@ RSpec.describe '#add_number' do
   it 'raises an error for invalid custom delimiter format' do
     expect(add_number("//$\n1$2$3$")).to eq(6)
   end
+
+  it 'handles delimiters of any length' do
+    expect(add_number("//[***]\n12***22***45")).to eq(79)
+  end
 end
 
 RSpec.describe '#fetch_integer_numbers' do
@@ -88,6 +92,12 @@ RSpec.describe '#fetch_integer_numbers' do
   context 'when input contains invalid characters' do
     it 'raises an error' do
       expect(fetch_integer_numbers('1,2,three')).to eq([1, 2, 0])
+    end
+  end
+
+  context 'when input contains delimiter of any length' do
+    it 'parses numbers correctly' do
+      expect(fetch_integer_numbers("//[***]\n10***11***12")).to eq([10, 11, 12])
     end
   end
 end
