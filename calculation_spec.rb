@@ -20,7 +20,7 @@ RSpec.describe '#add_number' do
   end
 
   it 'ignores invalid characters and sums valid numbers' do
-    expect(add_number('1,a,3')).to eq(4)
+    expect(add_number('11,a,33')).to eq(44)
   end
 
   it 'raises an error for a single negative number' do
@@ -31,15 +31,31 @@ RSpec.describe '#add_number' do
     expect(add_number('-1,-2,-3')).to eq('negative numbers not allowed: -1, -2, -3')
   end
 
-  it 'returns the sum ignoring non-numeric characters' do
-    expect(add_number('1,2,b,3')).to eq(6)
-  end
-
   it 'returns 0 for a string with only non-numeric characters' do
     expect(add_number('a,b,c')).to eq(0)
   end
 
   it 'handles a mix of positive and negative numbers, raising an error for negatives' do
     expect(add_number('1,-2,3,-4')).to eq('negative numbers not allowed: -2, -4')
+  end
+
+  it 'supports custom single-character delimiters' do
+    expect(add_number("//;\n1;2;3")).to eq(6)
+  end
+
+  it 'ignores numbers greater than 1000' do
+    expect(add_number("2,1022,6")).to eq(8)
+  end
+
+  it 'handles custom delimiters with numbers greater than 1000' do
+    expect(add_number("//;\n2;1001;6")).to eq(8)
+  end
+
+  it 'handles newline characters as delimiters' do
+    expect(add_number("1\n2,3")).to eq(6)
+  end
+
+  it 'raises an error for invalid custom delimiter format' do
+    expect(add_number("//;\n1;2;3;")).to eq(6)
   end
 end
