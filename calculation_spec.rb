@@ -62,6 +62,18 @@ RSpec.describe '#add_number' do
   it 'handles delimiters of any length' do
     expect(add_number("//[***]\n12***22***45")).to eq(79)
   end
+
+  it 'handles multiple custom delimiters with different lengths' do
+    expect(add_number("//[***][%%]\n12***22%%45")).to eq(79)
+  end
+
+  it 'handles mixed delimiters with custom and newline' do
+    expect(add_number("//[***]\n12***22\n45")).to eq(79)
+  end
+
+  it 'handles multiple custom delimiters and newline' do  
+    expect(add_number("//[**][$$]\n12**22\n45$$\n99")).to eq(178)
+  end
 end
 
 RSpec.describe '#fetch_integer_numbers' do
@@ -98,6 +110,18 @@ RSpec.describe '#fetch_integer_numbers' do
   context 'when input contains delimiter of any length' do
     it 'parses numbers correctly' do
       expect(fetch_integer_numbers("//[***]\n10***11***12")).to eq([10, 11, 12])
+    end
+  end
+
+  context 'when input contains multiple custom delimiters' do
+    it 'parses numbers correctly' do
+      expect(fetch_integer_numbers("//[**][%%]\n10**11%%12")).to eq([10, 11, 12])
+    end
+  end
+
+  context 'when input contains multiple custom delimiters and newlines' do
+    it 'parses numbers correctly' do
+      expect(fetch_integer_numbers("//[**][%%]\n10**11\n12%%88")).to eq([10, 11, 12, 88])
     end
   end
 end
